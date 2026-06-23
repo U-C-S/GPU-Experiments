@@ -34,6 +34,33 @@
         <canvas id="gpu-canvas" aria-label="Animated WebGPU demo"></canvas>
       </section>
 
+      <section class="compute-panel" aria-labelledby="compute-title">
+        <div>
+          <p class="eyebrow">Compute shader</p>
+          <h2 id="compute-title">Square a list on the GPU.</h2>
+          <p class="lede">
+            A storage buffer starts with eight numbers. The compute pass runs
+            one invocation per number, writes the square back, and maps a read
+            buffer so JavaScript can print the result.
+          </p>
+        </div>
+
+        <div class="compute-grid">
+          <div class="compute-cell">
+            <span>Input buffer</span>
+            <strong id="compute-input">Waiting...</strong>
+          </div>
+          <div class="compute-cell">
+            <span>Output buffer</span>
+            <strong id="compute-output">Waiting...</strong>
+          </div>
+          <div class="compute-cell">
+            <span>Compute status</span>
+            <strong id="compute-status">Waiting...</strong>
+          </div>
+        </div>
+      </section>
+
       <section class="guide">
         <article class="step">
           <span class="step-index">01</span>

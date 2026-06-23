@@ -27,6 +27,7 @@ body {
 
 .hero,
 .canvas-panel,
+.compute-panel,
 .guide {
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(7, 10, 16, 0.72);
@@ -118,6 +119,44 @@ input[type="range"] {
     #05070a;
 }
 
+.compute-panel {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.compute-panel h2 {
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  line-height: 1;
+}
+
+.compute-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.compute-cell {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  display: grid;
+  gap: 8px;
+}
+
+.compute-cell span {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(237, 242, 255, 0.56);
+}
+
+.compute-cell strong {
+  color: #d8e4ff;
+  line-height: 1.4;
+}
+
 .guide {
   padding: 12px;
   display: grid;
@@ -167,6 +206,7 @@ input[type="range"] {
   }
 
   .controls,
+  .compute-panel,
   .guide {
     grid-template-columns: 1fr;
   }

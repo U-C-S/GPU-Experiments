@@ -1,4 +1,5 @@
 import "./style.css";
+import computeShaderSource from "./shaders/square-numbers.wgsl?raw";
 import shaderSource from "./shaders/triangle.wgsl?raw";
 
 type StepKey = "adapter" | "device" | "shader" | "frame";
@@ -15,6 +16,9 @@ function queryRequired<T extends Element>(selector: string): T {
 const canvas = queryRequired<HTMLCanvasElement>("#gpu-canvas");
 const statusText = queryRequired<HTMLElement>("#status-text");
 const accentSlider = queryRequired<HTMLInputElement>("#accent");
+const computeInputText = queryRequired<HTMLElement>("#compute-input");
+const computeOutputText = queryRequired<HTMLElement>("#compute-output");
+const computeStatusText = queryRequired<HTMLElement>("#compute-status");
 const stepLabels: Record<StepKey, HTMLElement | null> = {
   adapter: document.querySelector("#step-adapter"),
   device: document.querySelector("#step-device"),
@@ -35,6 +39,10 @@ function setStep(step: StepKey, message: string) {
   }
 }
 
+function setComputeStatus(message: string) {
+  computeStatusText.textContent = message;
+}
+
 function resizeCanvasToDisplaySize(target: HTMLCanvasElement) {
   const width = Math.max(
     1,
@@ -49,6 +57,67 @@ function resizeCanvasToDisplaySize(target: HTMLCanvasElement) {
     target.width = width;
     target.height = height;
   }
+}
+
+async function runComputeSample(device: GPUDevice) {
+  const input = new Float32Array([1, 2, 3, 4, 5, 6, 7, 8]);
+  const bufferSize = input.byteLength;
+
+  computeInputText.textContent = Array.from(input).join(", ");
+  setComputeStatus("Compiling compute WGSL");
+
+  const shaderModule = device.createShaderModule({ code: computeShaderSource });
+  const pipeline = device.createComputePipeline({
+    layout: "auto",
+    compute: {
+      module: shaderModule,
+      entryPoint: "squareNumbers",
+    },
+  });
+
+  const storageBuffer = device.createBuffer({
+    size: bufferSize,
+    usage:
+      GPUBufferUsage.STORAGE |
+      GPUBufferUsage.COPY_DST |
+      GPUBufferUsage.COPY_SRC,
+  });
+  const readBuffer = device.createBuffer({
+    size: bufferSize,
+    usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ,
+  });
+
+  device.queue.writeBuffer(storageBuffer, 0, input);
+
+  const bindGroup = device.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer: storageBuffer,
+        },
+      },
+    ],
+  });
+
+  setComputeStatus("Dispatching GPU work");
+
+  const commandEncoder = device.createCommandEncoder();
+  const passEncoder = commandEncoder.beginComputePass();
+  passEncoder.setPipeline(pipeline);
+  passEncoder.setBindGroup(0, bindGroup);
+  passEncoder.dispatchWorkgroups(input.length);
+  passEncoder.end();
+  commandEncoder.copyBufferToBuffer(storageBuffer, 0, readBuffer, 0, bufferSize);
+  device.queue.submit([commandEncoder.finish()]);
+
+  await readBuffer.mapAsync(GPUMapMode.READ);
+  const result = new Float32Array(readBuffer.getMappedRange().slice(0));
+  readBuffer.unmap();
+
+  computeOutputText.textContent = Array.from(result).join(", ");
+  setComputeStatus("Complete");
 }
 
 async function start() {
@@ -73,6 +142,12 @@ async function start() {
   setStep("device", "Requesting logical device");
   const device = await adapter.requestDevice();
   setStep("device", "Device ready");
+  runComputeSample(device).catch((error: unknown) => {
+    console.error(error);
+    const message =
+      error instanceof Error ? error.message : "Compute sample failed";
+    setComputeStatus(message);
+  });
 
   const context = canvas.getContext("webgpu");
   if (!context) {
