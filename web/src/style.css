@@ -17,12 +17,65 @@ body {
   background: transparent;
 }
 
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+.side-nav {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 28px 20px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(7, 10, 16, 0.82);
+  display: grid;
+  align-content: start;
+  gap: 28px;
+}
+
+.side-nav h1 {
+  max-width: none;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.side-nav nav {
+  display: grid;
+  gap: 8px;
+}
+
+.side-nav a {
+  color: rgba(237, 242, 255, 0.72);
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.side-nav a:hover,
+.side-nav a[aria-current="page"] {
+  color: #edf2ff;
+  background: rgba(143, 181, 255, 0.18);
+}
+
 .layout {
   width: min(1100px, calc(100vw - 32px));
   margin: 0 auto;
   padding: 48px 0 56px;
   display: grid;
   gap: 24px;
+}
+
+.page {
+  display: grid;
+  gap: 24px;
+}
+
+.page[hidden] {
+  display: none;
 }
 
 .hero,
@@ -42,7 +95,6 @@ body {
 
 .eyebrow {
   margin: 0 0 10px;
-  text-transform: uppercase;
   letter-spacing: 0.18em;
   color: #8fb5ff;
   font-size: 0.78rem;
@@ -50,15 +102,16 @@ body {
 
 h1,
 h2,
+h3,
 p {
   margin: 0;
 }
 
-h1 {
+.hero h2 {
   max-width: 12ch;
   font-size: clamp(2.5rem, 6vw, 5rem);
   line-height: 0.95;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
 }
 
 .lede {
@@ -115,8 +168,7 @@ input[type="range"] {
   display: block;
   border-radius: 20px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
-    #05070a;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent), #05070a;
 }
 
 .compute-panel {
@@ -179,7 +231,7 @@ input[type="range"] {
   letter-spacing: 0.14em;
 }
 
-.step h2 {
+.step h3 {
   font-size: 1.1rem;
   margin-bottom: 8px;
 }
@@ -195,6 +247,22 @@ input[type="range"] {
 }
 
 @media (max-width: 760px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .side-nav {
+    position: static;
+    height: auto;
+    padding: 18px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .side-nav nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .layout {
     width: min(100vw - 20px, 1100px);
     padding: 20px 0 28px;

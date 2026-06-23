@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "moduleResolution": "bundler",
+    "jsx": "react-jsx",
     "types": ["vite/client", "@webgpu/types"],
 
     "noUncheckedIndexedAccess": true,
