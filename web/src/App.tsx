@@ -1,6 +1,7 @@
 import { useGpuDevice } from "./hooks/useGpuDevice";
 import { useHashPage } from "./hooks/useHashPage";
 import { ComputePage } from "./pages/ComputePage";
+import { GameOfLifePage } from "./pages/GameOfLifePage";
 import { TrianglePage } from "./pages/TrianglePage";
 
 export function App() {
@@ -18,6 +19,9 @@ export function App() {
           <a href="#compute" aria-current={page === "compute" ? "page" : false}>
             Compute shader
           </a>
+          <a href="#life" aria-current={page === "life" ? "page" : false}>
+            Game of Life
+          </a>
           <a
             href="#triangle"
             aria-current={page === "triangle" ? "page" : false}
@@ -28,9 +32,13 @@ export function App() {
       </aside>
 
       <main className="layout">
-        {page === "compute" ? (
+        {page === "compute" && (
           <ComputePage device={device} gpuError={gpuError} />
-        ) : (
+        )}
+        {page === "life" && (
+          <GameOfLifePage device={device} gpuError={gpuError} />
+        )}
+        {page === "triangle" && (
           <TrianglePage
             adapterStatus={adapterStatus}
             device={device}

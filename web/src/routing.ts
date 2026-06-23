@@ -1,5 +1,13 @@
-export type PageKey = "compute" | "triangle";
+export type PageKey = "compute" | "life" | "triangle";
 
 export function getPageFromHash(): PageKey {
-  return location.hash === "#triangle" ? "triangle" : "compute";
+  if (location.hash === "#triangle") {
+    return "triangle";
+  }
+
+  if (location.hash === "#life") {
+    return "life";
+  }
+
+  return "compute";
 }

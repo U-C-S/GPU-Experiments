@@ -171,6 +171,30 @@ input[type="range"] {
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent), #05070a;
 }
 
+.sample-canvas {
+  width: 100%;
+  height: min(60vh, 520px);
+  display: block;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent), #05070a;
+}
+
+.life-hero h2 {
+  max-width: 14ch;
+}
+
+.life-panel {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(125, 255, 205, 0.13), transparent 34%),
+    rgba(7, 10, 16, 0.72);
+}
+
+.life-canvas {
+  aspect-ratio: 3 / 2;
+  height: auto;
+}
+
 .compute-panel {
   padding: 24px;
   display: grid;
@@ -260,7 +284,7 @@ input[type="range"] {
   }
 
   .side-nav nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .layout {
@@ -281,5 +305,9 @@ input[type="range"] {
 
   #gpu-canvas {
     height: 340px;
+  }
+
+  .sample-canvas {
+    min-height: 300px;
   }
 }
